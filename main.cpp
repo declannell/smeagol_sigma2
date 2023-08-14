@@ -60,14 +60,14 @@ int main(int argc, char **argv)
 	read_gamma(parameters, gamma_left_up, gamma_right_up, 1);
 	read_gamma(parameters, gamma_left_down, gamma_right_down, 2);
 
-	if (parameters.myid == 0) std::cout << "Got the gamma matrices \n";
+	if (parameters.myid == 0) std::cout << "Got the gamma matrices from file \n";
 
 	get_lesser_se(parameters, se_left_lesser_up, gamma_left_up, 0);
 	get_lesser_se(parameters, se_left_lesser_down, gamma_left_down, 0);
 	get_lesser_se(parameters, se_right_lesser_up, gamma_right_up, 1);
 	get_lesser_se(parameters, se_right_lesser_down, gamma_right_down, 1);
 
-	if (parameters.myid == 0) cout << "Got the lesser self energy \n";
+	if (parameters.myid == 0) cout << "Got the lesser self energy using FD \n";
 
 	if (parameters.read_gf == 1) {//if we are reading the green function from file we don't use the retarded self energy. 
 		read_non_interacting_gf(parameters, gf_int_r_up, 1);
@@ -80,7 +80,7 @@ int main(int argc, char **argv)
 		get_retarded_se(parameters, se_right_retarded_up, gamma_right_up);
 		get_retarded_se(parameters, se_right_retarded_down, gamma_right_down);
 
-		if (parameters.myid == 0) cout << "Got the retarded self energy \n";
+		if (parameters.myid == 0) cout << "Got the retarded self energy from the kramer kronig \n";
 
 		if (parameters.model_calc == 0) {
 			if (parameters.myid == 0) std::cout << "Doing a model calculation \n";
@@ -88,28 +88,28 @@ int main(int argc, char **argv)
     		get_model_gf(parameters, gf_int_r_down, sigma_mb_r_down, se_right_retarded_down, se_left_retarded_down);
 		} else if (parameters.model_calc == 1) {
 			read_hamiltonian(parameters, hamiltonian_up, hamiltonian_down);
+			if (parameters.myid == 0) std::cout << "Read the hamiltonian form file \n";
     		get_interacting_retarded_gf(parameters, gf_int_r_up, hamiltonian_up, sigma_mb_r_up, se_right_retarded_up, se_left_retarded_up);
     		get_interacting_retarded_gf(parameters, gf_int_r_down, hamiltonian_down, sigma_mb_r_down, se_right_retarded_down, se_left_retarded_down);
-			if (parameters.myid == 0) std::cout << "created non-interacting green function from the hamiltonian and embedding self energies\n";
 		}
 	}
 
-	//for (int i = 0; i < parameters.num_orb_total; i++) {
-	//	for (int j = 0; j < parameters.num_orb_total; j++) {
-	//		print_to_file(parameters, "gamma_left_up", gamma_left_up, i, j , 1);
-	//		print_to_file(parameters, "gamma_right_up", gamma_right_up, i, j , 1);
-	//		print_to_file(parameters, "gamma_left_down", gamma_left_down, i, j , 1);
-	//		print_to_file(parameters, "gamma_right_down", gamma_right_down, i, j , 1);
-	//		if (parameters.read_gf != 1) {
-	//			print_to_file(parameters, "se_left_retarded_up", se_left_retarded_up, i, j , 1);
-	//			print_to_file(parameters, "se_left_retarded_down", se_left_retarded_down, i, j , 1);
-	//			print_to_file(parameters, "se_right_retarded_up", se_right_retarded_up, i, j , 1);
-	//			print_to_file(parameters, "se_right_retarded_down", se_right_retarded_down, i, j , 1);
-	//		}
-	//		print_to_file(parameters, "gf_non_r_up", gf_int_r_up, i, j , 1);
-	//		print_to_file(parameters, "gf_non_r_down", gf_int_r_down, i, j , 1);
-	//	}
-	//}
+	for (int i = 0; i < parameters.num_orb_total; i++) {
+		for (int j = 0; j < parameters.num_orb_total; j++) {
+			print_to_file(parameters, "gamma_left_up", gamma_left_up, i, j , 1);
+			print_to_file(parameters, "gamma_right_up", gamma_right_up, i, j , 1);
+			print_to_file(parameters, "gamma_left_down", gamma_left_down, i, j , 1);
+			print_to_file(parameters, "gamma_right_down", gamma_right_down, i, j , 1);
+			if (parameters.read_gf != 1) {
+				print_to_file(parameters, "se_left_retarded_up", se_left_retarded_up, i, j , 1);
+				print_to_file(parameters, "se_left_retarded_down", se_left_retarded_down, i, j , 1);
+				print_to_file(parameters, "se_right_retarded_up", se_right_retarded_up, i, j , 1);
+				print_to_file(parameters, "se_right_retarded_down", se_right_retarded_down, i, j , 1);
+			}
+			print_to_file(parameters, "gf_non_r_up", gf_int_r_up, i, j , 1);
+			print_to_file(parameters, "gf_non_r_down", gf_int_r_down, i, j , 1);
+		}
+	}
 
 	get_lesser_gf(parameters, gf_int_r_up, se_left_lesser_up, se_right_lesser_up, sigma_mb_l_up, gf_int_l_up);
 	get_lesser_gf(parameters, gf_int_r_down, se_left_lesser_down, se_right_lesser_down, sigma_mb_l_down, gf_int_l_down);

@@ -50,7 +50,7 @@ void print_to_file(const Parameters &parameters, string filename, MatrixVectorTy
 	if (parameters.myid == 0) {
 
 		std::ostringstream ossgf;
-		ossgf  << "textfiles_from_code/" << voltage_step << "_" << filename << "_" << orbital_1 << "_" << orbital_2 << ".dat";
+		ossgf  << voltage_step << "_" << filename << "_" << orbital_1 << "_" << orbital_2 << ".dat";
 		std::string var = ossgf.str();
 		std::ofstream file;
 		//std::cout << "Printing file " << var <<  "\n";

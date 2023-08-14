@@ -64,16 +64,16 @@ void self_energy_2nd_order(const Parameters& parameters, AIM &aim_up, AIM &aim_d
 		int y = r + parameters.start.at(parameters.myid);
 		//std::cout << "The energy index is " << y << std::endl;
 		
-		aim_up.self_energy_mb_retarded.at(r) = aim_up.self_energy_mb_retarded.at(r) * 0.5 + 0.5 * parameters.hubbard_interaction * parameters.hubbard_interaction
+		aim_up.self_energy_mb_retarded.at(r) = aim_up.self_energy_mb_retarded.at(r) * 0.0 + 1.0 * parameters.hubbard_interaction * parameters.hubbard_interaction
 		    * integrate(parameters, gf_retarded_up, gf_retarded_down, gf_lesser_down, y); //this resets the self energy	
-		aim_up.self_energy_mb_retarded.at(r) += 0.5 * parameters.hubbard_interaction * parameters.hubbard_interaction
+		aim_up.self_energy_mb_retarded.at(r) += 1.0 * parameters.hubbard_interaction * parameters.hubbard_interaction
 		    * integrate(parameters, gf_retarded_up, gf_lesser_down, gf_lesser_down, y); 
-		aim_up.self_energy_mb_retarded.at(r) += 0.5 * parameters.hubbard_interaction * parameters.hubbard_interaction
+		aim_up.self_energy_mb_retarded.at(r) += 1.0 * parameters.hubbard_interaction * parameters.hubbard_interaction
 		    * integrate(parameters, gf_lesser_up, gf_retarded_down, gf_lesser_down, y); 
-		aim_up.self_energy_mb_retarded.at(r) += 0.5 * parameters.hubbard_interaction * parameters.hubbard_interaction
+		aim_up.self_energy_mb_retarded.at(r) += 1.0 * parameters.hubbard_interaction * parameters.hubbard_interaction
 		    * integrate(parameters, gf_lesser_up, gf_lesser_down, advanced_down, y); 
 
-		aim_up.self_energy_mb_lesser.at(r) = 0.5 * aim_up.self_energy_mb_lesser.at(r) + 0.5 * (parameters.hubbard_interaction * parameters.hubbard_interaction
+		aim_up.self_energy_mb_lesser.at(r) = 0.0 * aim_up.self_energy_mb_lesser.at(r) + 1.0 * (parameters.hubbard_interaction * parameters.hubbard_interaction
 		    * integrate(parameters, gf_lesser_up, gf_lesser_down, gf_greater_down, y)); 	
 	}
 }

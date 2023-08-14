@@ -220,12 +220,11 @@ void read_hamiltonian(const Parameters &parameters, MatrixType &hamiltonian_up, 
                 if (lineCount == 0) hamiltonian_up(0, 0) = num1;
                 if (lineCount == 1) hamiltonian_down(0, 0) = num1;
             } 
-
         }
     } else {
         std::cout << var << " File cannot be opened for reading." << std::endl;
     }
-    std::cout << hamiltonian_up << " " << hamiltonian_down << std::endl;
+    if (parameters.myid == 0) std::cout << hamiltonian_up << " " << hamiltonian_down << std::endl;
     my_file.close(); 
 }
 
@@ -236,6 +235,7 @@ void get_interacting_retarded_gf(const Parameters &parameters, MatrixVectorType 
             MatrixType inverse_gf = (gf_int_r.at(r).inverse() - sigma_mb_r.at(r));
             gf_int_r.at(r) = inverse_gf.inverse();
         }
+        if (parameters.myid == 0) std::cout << "Got interacting green function from Dyson equation\n";
     } else {
         if (parameters.num_atoms != 1) {
             if (parameters.myid == 0) std::cout << "the number of atoms is more than 1. Can't construct gf with embedding self energies \n";
@@ -247,6 +247,7 @@ void get_interacting_retarded_gf(const Parameters &parameters, MatrixVectorType 
             gf_inverse(0, 0) = parameters.energy.at(y) - hamiltonian(0, 0) - embedding_r.at(r)(0, 0) - embedding_l.at(r)(0, 0) - sigma_mb_r.at(r)(0, 0);
             gf_int_r.at(r) = gf_inverse.inverse();
         }   
+        if (parameters.myid == 0) std::cout << "Got interacting green function from the hamiltonian and self energies\n";
     }
 }
 
