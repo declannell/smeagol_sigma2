@@ -39,6 +39,9 @@ Parameters Parameters::from_file()
 		std::exit(1);
 	} 
 
+	parameters.se_mixing = 0.5;
+	parameters.num_atoms = 1;
+
 	while (getline(input_file, line)) {
 			//std::cout << line << '\n';
 		simple_tokenizer(line, variable, value);
@@ -75,6 +78,8 @@ Parameters Parameters::from_file()
 			parameters.model_calc = std::stoi(value);
 		}  else if (variable == "num_atoms") {
 			parameters.num_atoms = std::stoi(value);
+		} else if (variable == "se_mixing") {
+			parameters.se_mixing = std::stod(value);
 		}//else if (variable == "random_err") {
 			//parameters.random_err = std::stod(value);
 		//}
@@ -162,5 +167,5 @@ void print_parameters(Parameters& parameters)
 	std::cout << "grid density = " << parameters.grid_density << std::endl;
 	std::cout << "num atoms = " << parameters.num_atoms << std::endl;
 	std::cout << "num orb totals = " << parameters.num_orb_total << std::endl;
-
+	std::cout << "se_mixing= " << parameters.se_mixing << std::endl;
 }

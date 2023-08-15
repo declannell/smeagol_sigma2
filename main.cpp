@@ -174,6 +174,6 @@ int main(int argc, char **argv)
 		cout << "The spin down Meir wingreen right current is " << current_down_r << endl;
 		cout << "The coherent spin down current is " << current_down_coherent << endl;
 	}
-
+	//std::cout << "Everything is done \n";
 	MPI_Finalize();
 }
