@@ -44,7 +44,6 @@ void get_number_energy_points(Parameters &parameters) {
     my_file.close(); 
 }
 
-
 void read_non_interacting_gf(Parameters &parameters, MatrixVectorType &gf_non_int_r, int spin) {
         for (int i = 0; i < parameters.num_orb_total; i++) {
             for (int j = 0; j < parameters.num_orb_total; j++) {
@@ -55,8 +54,6 @@ void read_non_interacting_gf(Parameters &parameters, MatrixVectorType &gf_non_in
                 //std::cout << var_left << std::endl;
 	            my_file.open(var, ios::in);
 	    	    std::string line;
-                std::ifstream file(var); // Replace "input.txt" with the name of your input file
-
                 int lineCount = -1;
                 int energy_index = 0;
                 while (std::getline(my_file, line)) {
@@ -70,12 +67,10 @@ void read_non_interacting_gf(Parameters &parameters, MatrixVectorType &gf_non_in
                                 // Use the values stored in num1, num2, and num3
                                 int y = energy_index - parameters.start.at(parameters.myid);
                                 gf_non_int_r.at(y)(i, j) = num2 + parameters.j1 * num3;
-
                             } else {
                                 std::cout << "Invalid line format: " << line << std::endl;
                             }
                         }
-
                         energy_index++;
                     }
                 }
@@ -83,6 +78,46 @@ void read_non_interacting_gf(Parameters &parameters, MatrixVectorType &gf_non_in
             }
         }
 }
+
+
+//void read_non_interacting_gf(Parameters &parameters, MatrixVectorType &gf_non_int_r, int spin) {
+//        for (int i = 0; i < parameters.num_orb_total; i++) {
+//            for (int j = 0; j < parameters.num_orb_total; j++) {
+//                fstream my_file;
+//                std::ostringstream oss;
+//                oss << parameters.path << "/Av-k_ReImGF_ReEne_K_" << i + 1 <<  "_" << j + 1 << "_" << spin << ".dat";
+//                std::string var = oss.str();
+//                //std::cout << var_left << std::endl;
+//	            my_file.open(var, ios::in);
+//	    	    std::string line;
+//                std::ifstream file(var); // Replace "input.txt" with the name of your input file
+//
+//                int lineCount = -1;
+//                int energy_index = 0;
+//                while (std::getline(my_file, line)) {
+//                    lineCount++;
+//                    if (lineCount % parameters.grid_density == 0) {//this selects every 10th lines
+//                        if ((energy_index >= parameters.start.at(parameters.myid)) && (energy_index < parameters.start.at(parameters.myid) + parameters.steps_myid)) {
+//                            //this selects the appriotate lines for each process
+//                            std::istringstream iss(line);
+//                            double num1, num2, num3;
+//                            if (iss >> num1 >> num2 >> num3) {
+//                                // Use the values stored in num1, num2, and num3
+//                                int y = energy_index - parameters.start.at(parameters.myid);
+//                                gf_non_int_r.at(y)(i, j) = num2 + parameters.j1 * num3;
+//
+//                            } else {
+//                                std::cout << "Invalid line format: " << line << std::endl;
+//                            }
+//                        }
+//
+//                        energy_index++;
+//                    }
+//                }
+//                my_file.close();
+//            }
+//        }
+//}
 
 void read_delta(Parameters &parameters, MatrixVectorType &delta, int spin) {
 
@@ -287,12 +322,12 @@ void get_lesser_se(Parameters &parameters, MatrixVectorType &se_lesser, MatrixVe
 }
 
 void get_retarded_se(Parameters &parameters, MatrixVectorType &se_retarded, MatrixVectorType &gamma) {
-    if (parameters.model_calc == 1) {//this is an ab initio calculation
+    if (parameters.model_calc == 0) {//this is a model calculation
         for (int r = 0; r < parameters.steps_myid; r++) {
             //double random = double((rand() % 1000)) / 1000 * 0;
             se_retarded.at(r)(0, 0) = - parameters.j1 * (gamma.at(r)(0, 0).real() / (2.0));
         }
-    } else if (parameters.model_calc == 0) {
+    } else if (parameters.model_calc == 1) {//this is an ab initio calculation
         std::vector<double> imag_self_energy_myid(parameters.steps_myid), imag_self_energy(parameters.steps);
         for (int r = 0; r < parameters.steps_myid; r++){
             imag_self_energy_myid.at(r) = - gamma.at(r)(0, 0).real() / (2.0);
