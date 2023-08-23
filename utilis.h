@@ -22,3 +22,8 @@ void distribute_to_procs(const Parameters &parameters, std::vector<dcomp> &vec_1
 void distribute_to_procs(const Parameters &parameters, std::vector<double> &vec_1, const std::vector<double> &vec_2);
 
 MatrixVectorType initializeMatrixVector(int size, int rows, int cols);
+
+void print_to_file(const Parameters &parameters, string filename, std::vector<double> &quantity, int voltage_step);
+
+void print_to_file(const Parameters &parameters, string filename, std::vector<dcomp> &quantity, int voltage_step);
+

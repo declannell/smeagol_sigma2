@@ -60,6 +60,12 @@ void self_energy_2nd_order(const Parameters& parameters, AIM &aim_up, AIM &aim_d
     MPI_Allgatherv(&(gf_greater_down_myid.at(0)), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(gf_greater_down.at(0)),
 	 &(parameters.steps_proc.at(0)), &(parameters.displs.at(0)), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
 	
+	print_to_file(parameters,"gf_retarded_up", gf_retarded_up, 1);
+	print_to_file(parameters,"advanced_down", advanced_down, 1);
+	print_to_file(parameters,"gf_lesser_down", gf_lesser_down, 1);
+	print_to_file(parameters,"gf_greater_down", gf_greater_down, 1);
+
+
 	for (int r = 0; r < parameters.steps_myid; r++){
 		int y = r + parameters.start.at(parameters.myid);
 		//std::cout << "The energy index is " << y << std::endl;
@@ -197,6 +203,18 @@ void self_energy_2nd_order_kramers_kronig(const Parameters& parameters, AIM &aim
 
     MPI_Allgatherv(&(impurity_gf_down_imag_myid.at(0)), parameters.steps_myid, MPI_DOUBLE, &(impurity_gf_down_imag.at(0)),
 	 &(parameters.steps_proc.at(0)), &(parameters.displs.at(0)), MPI_DOUBLE, MPI_COMM_WORLD);
+
+	//print_to_file(parameters, "gf_greater_down", gf_greater_down, 1);
+	//print_to_file(parameters, "impurity_gf_up_imag", impurity_gf_up_imag, 1);
+//
+	//print_to_file(parameters, "gf_lesser_up", gf_lesser_up, 1);
+//
+	//if (parameters.myid == 0) {
+	//	for (int r = 0; r < parameters.steps; r++) {
+	//		std::cout << impurity_gf_up_imag.at(r) << std::endl;
+	//	}
+	//}
+
 
 	for (int r = 0; r < parameters.steps_myid; r++){
 		int y = r + parameters.start.at(parameters.myid);

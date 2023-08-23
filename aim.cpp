@@ -23,15 +23,21 @@ AIM::AIM(const Parameters &parameters, const MatrixVectorType &local_gf_retarded
     this->fermi_function_eff.resize(parameters.steps_myid);
 
     get_dynamical_fields(parameters, local_gf_retarded, local_gf_lesser, i);
+    //print_to_file(parameters, "dynamical_field_retarded", this->dynamical_field_retarded, 1);
+    //print_to_file(parameters, "dynamical_field_lesser", this->dynamical_field_lesser, 1);
+
     if (parameters.impurity_solver == 1) {//brute force method
         get_impurity_gf_mb_retarded(parameters);
         get_lesser_hybridisation(parameters);   
         get_impurity_gf_mb_lesser(parameters);
+        print_to_file(parameters, "hybridisation_lesser", this->hybridisation_lesser, 1);
+
     } else if (parameters.impurity_solver == 2){
         get_effective_fermi_function(parameters); 
+        //print_to_file(parameters, "effective_fermi_function", this->fermi_function_eff, 1);
     }
     
-
+    
     //for (int r = 0; r < parameters.steps_myid; r++) std::cout << parameters.energy.at(r) << " " << local_gf_retarded.at(r)(0, 0) << " " << this->dynamical_field_retarded.at(r) 
     //    << " " << this->impurity_gf_mb_retarded.at(r) << "\n";
 }
