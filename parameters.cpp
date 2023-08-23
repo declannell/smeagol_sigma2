@@ -91,12 +91,12 @@ Parameters Parameters::from_file()
 	parameters.j1 = -1;
 	parameters.j1 = sqrt(parameters.j1);
 
-	//parameters.delta_energy = parameters.energy.at(1) - parameters.energy.at(0);
+	//parameters.delta_energy = parameters.energy[1] - parameters.energy[0];
 	//double delta_energy =
 	//    (parameters.e_upper_bound - parameters.e_lower_bound) / (double)parameters.steps;
 //
 	//for (int i = 0; i < parameters.steps; i++) {
-	//	parameters.energy.at(i) = parameters.e_lower_bound + delta_energy * (double)i;
+	//	parameters.energy[i] = parameters.e_lower_bound + delta_energy * (double)i;
 	//}
 
 	if (parameters.num_atoms != 1) parameters.read_gf = 1, parameters.model_calc = 1; //if there is more than 1 atom in the scattering region we must read the gf from file. 
@@ -114,22 +114,22 @@ Parameters Parameters::from_file()
 	parameters.steps_proc.resize(parameters.size, 0), parameters.end.resize(parameters.size, 0), parameters.start.resize(parameters.size, 0),
 		parameters.displs.resize(parameters.size, 0);
 
-	decomp(parameters.steps, parameters.size, parameters.myid, &parameters.start.at(parameters.myid), &parameters.end.at(parameters.myid));
-	parameters.steps_myid = parameters.end.at(parameters.myid) - parameters.start.at(parameters.myid) + 1;
+	decomp(parameters.steps, parameters.size, parameters.myid, &parameters.start[parameters.myid], &parameters.end[parameters.myid]);
+	parameters.steps_myid = parameters.end[parameters.myid] - parameters.start[parameters.myid] + 1;
 
-	parameters.steps_proc.at(parameters.myid) = parameters.steps_myid *  parameters.num_orbitals * parameters.num_orbitals;
+	parameters.steps_proc[parameters.myid] = parameters.steps_myid *  parameters.num_orbitals * parameters.num_orbitals;
 
 	for (int a = 0; a < parameters.size; a++){
-		MPI_Bcast(&parameters.start.at(a), 1, MPI_INT, a, MPI_COMM_WORLD);
-		MPI_Bcast(&parameters.end.at(a), 1, MPI_INT, a, MPI_COMM_WORLD);
-		MPI_Bcast(&parameters.steps_proc.at(a), 1, MPI_INT, a, MPI_COMM_WORLD);
+		MPI_Bcast(&parameters.start[a], 1, MPI_INT, a, MPI_COMM_WORLD);
+		MPI_Bcast(&parameters.end[a], 1, MPI_INT, a, MPI_COMM_WORLD);
+		MPI_Bcast(&parameters.steps_proc[a], 1, MPI_INT, a, MPI_COMM_WORLD);
 	}
 
 	parameters.num_orb_total = parameters.num_orbitals * parameters.num_atoms;
 
     parameters.displs[0] = 0;
     for (int i = 1; i < parameters.size; i++) {
-        parameters.displs.at(i) = parameters.displs.at(i - 1) + parameters.steps_proc.at(i - 1);
+        parameters.displs[i] = parameters.displs[i - 1] + parameters.steps_proc[i - 1];
     }
 	
 
@@ -137,7 +137,7 @@ Parameters Parameters::from_file()
 		print_parameters(parameters);
 	}
 
-	parameters.delta_energy = parameters.energy.at(1) - parameters.energy.at(0);
+	parameters.delta_energy = parameters.energy[1] - parameters.energy[0];
 
 	return parameters;
 }

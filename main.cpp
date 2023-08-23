@@ -123,10 +123,10 @@ int main(int argc, char **argv)
 		}
 
 		for (int r = 0; r < parameters.steps_myid; r++) {
-			sigma_mb_r_up.at(r) (i, i) = aim_up.self_energy_mb_retarded.at(r);
-			sigma_mb_l_up.at(r) (i, i) = aim_up.self_energy_mb_lesser.at(r);
-			sigma_mb_r_down.at(r) (i, i) = aim_down.self_energy_mb_retarded.at(r);
-			sigma_mb_l_down.at(r) (i, i) = aim_down.self_energy_mb_lesser.at(r);
+			sigma_mb_r_up[r] (i, i) = aim_up.self_energy_mb_retarded[r];
+			sigma_mb_l_up[r] (i, i) = aim_up.self_energy_mb_lesser[r];
+			sigma_mb_r_down[r] (i, i) = aim_down.self_energy_mb_retarded[r];
+			sigma_mb_l_down[r] (i, i) = aim_down.self_energy_mb_lesser[r];
 		}
 	}
 

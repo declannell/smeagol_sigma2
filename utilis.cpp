@@ -31,19 +31,19 @@ void print_to_file(const Parameters &parameters, string filename, std::vector<dc
 		vec_1.resize(parameters.steps);
 		vec_1.resize(parameters.steps);
 		for (int r = 0; r < parameters.steps_myid; r ++){
-			vec_1.at(r) = quantity.at(r);  
+			vec_1[r] = quantity[r];  
 		}
 		for (int a = 1; a < parameters.size; a++){
-			MPI_Recv(&vec_1.at(parameters.start.at(a)), parameters.steps_proc.at(a), MPI_DOUBLE_COMPLEX, a, 300, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			MPI_Recv(&vec_1[parameters.start[a]], parameters.steps_proc[a], MPI_DOUBLE_COMPLEX, a, 300, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		}
 	} else {
 		//std::cout << "rank " << parameters.myid << " enters where parameters.myid != 0 \n";
 		vec_2.resize(parameters.steps_myid);
 		for (int r = 0; r < parameters.steps_myid; r++) {
-			vec_2.at(r) = quantity.at(r);
-			//std::cout << "On rank " << parameters.myid << " vector has a value of " << vec_2.at(r)  << std::endl;
+			vec_2[r] = quantity[r];
+			//std::cout << "On rank " << parameters.myid << " vector has a value of " << vec_2[r]  << std::endl;
 		}
-		MPI_Send(&(vec_2.at(0)), parameters.steps_myid, MPI_DOUBLE_COMPLEX, 0, 300, MPI_COMM_WORLD);
+		MPI_Send(&(vec_2[0]), parameters.steps_myid, MPI_DOUBLE_COMPLEX, 0, 300, MPI_COMM_WORLD);
 		//std::cout << "I, rank " << parameters.myid << " sent my part of the GF to rank 0 \n"; 
 	}
 	MPI_Barrier(MPI_COMM_WORLD);
@@ -57,7 +57,7 @@ void print_to_file(const Parameters &parameters, string filename, std::vector<dc
 	
 		file.open(var);
 		for (int r = 0; r < parameters.steps; r++) {
-			file << parameters.energy.at(r) << "  " << vec_1.at(r).real() << "   " << vec_1.at(r).imag() << "\n";
+			file << parameters.energy[r] << "  " << vec_1[r].real() << "   " << vec_1[r].imag() << "\n";
 		}
 		file.close();					
 	}
@@ -72,19 +72,19 @@ void print_to_file(const Parameters &parameters, string filename, std::vector<do
 		vec_1.resize(parameters.steps);
 		vec_1.resize(parameters.steps);
 		for (int r = 0; r < parameters.steps_myid; r ++){
-			vec_1.at(r) = quantity.at(r);  
+			vec_1[r] = quantity[r];  
 		}
 		for (int a = 1; a < parameters.size; a++){
-			MPI_Recv(&vec_1.at(parameters.start.at(a)), parameters.steps_proc.at(a), MPI_DOUBLE, a, 300, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			MPI_Recv(&vec_1[parameters.start[a]], parameters.steps_proc[a], MPI_DOUBLE, a, 300, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		}
 	} else {
 		//std::cout << "rank " << parameters.myid << " enters where parameters.myid != 0 \n";
 		vec_2.resize(parameters.steps_myid);
 		for (int r = 0; r < parameters.steps_myid; r++) {
-			vec_2.at(r) = quantity.at(r);
-			std::cout << "On rank " << parameters.myid << " vector has a value of " << vec_2.at(r)  << std::endl;
+			vec_2[r] = quantity[r];
+			std::cout << "On rank " << parameters.myid << " vector has a value of " << vec_2[r]  << std::endl;
 		}
-		MPI_Send(&(vec_2.at(0)), parameters.steps_myid, MPI_DOUBLE, 0, 300, MPI_COMM_WORLD);
+		MPI_Send(&(vec_2[0]), parameters.steps_myid, MPI_DOUBLE, 0, 300, MPI_COMM_WORLD);
 		//std::cout << "I, rank " << parameters.myid << " sent my part of the GF to rank 0 \n"; 
 	}
 	MPI_Barrier(MPI_COMM_WORLD);
@@ -98,8 +98,8 @@ void print_to_file(const Parameters &parameters, string filename, std::vector<do
 	
 		file.open(var);
 		for (int r = 0; r < parameters.steps; r++) {
-			std::cout << vec_1.at(r) << "\n";
-			file << parameters.energy.at(r) << "  " << vec_1.at(r) << "\n";
+			std::cout << vec_1[r] << "\n";
+			file << parameters.energy[r] << "  " << vec_1[r] << "\n";
 		}
 		file.close();					
 	}
@@ -113,19 +113,19 @@ void print_to_file(const Parameters &parameters, string filename, MatrixVectorTy
 		vec_1.resize(parameters.steps);
 		vec_1.resize(parameters.steps);
 		for (int r = 0; r < parameters.steps_myid; r ++){
-			vec_1.at(r) = quantity.at(r)(orbital_1, orbital_2);  
+			vec_1[r] = quantity[r](orbital_1, orbital_2);  
 		}
 		for (int a = 1; a < parameters.size; a++){
-			MPI_Recv(&vec_1.at(parameters.start.at(a)), parameters.steps_proc.at(a), MPI_DOUBLE_COMPLEX, a, 300, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			MPI_Recv(&vec_1[parameters.start[a]], parameters.steps_proc[a], MPI_DOUBLE_COMPLEX, a, 300, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		}
 	} else {
 		//std::cout << "rank " << parameters.myid << " enters where parameters.myid != 0 \n";
 		vec_2.resize(parameters.steps_myid);
 		for (int r = 0; r < parameters.steps_myid; r++) {
-			vec_2.at(r) = quantity.at(r)(orbital_1, orbital_2);
-			//std::cout << "On rank " << parameters.myid << " vector has a value of " << vec_2.at(r)  << std::endl;
+			vec_2[r] = quantity[r](orbital_1, orbital_2);
+			//std::cout << "On rank " << parameters.myid << " vector has a value of " << vec_2[r]  << std::endl;
 		}
-		MPI_Send(&(vec_2.at(0)), parameters.steps_myid, MPI_DOUBLE_COMPLEX, 0, 300, MPI_COMM_WORLD);
+		MPI_Send(&(vec_2[0]), parameters.steps_myid, MPI_DOUBLE_COMPLEX, 0, 300, MPI_COMM_WORLD);
 		//std::cout << "I, rank " << parameters.myid << " sent my part of the GF to rank 0 \n"; 
 	}
 	MPI_Barrier(MPI_COMM_WORLD);
@@ -139,7 +139,7 @@ void print_to_file(const Parameters &parameters, string filename, MatrixVectorTy
 	
 		file.open(var);
 		for (int r = 0; r < parameters.steps; r++) {
-			file << parameters.energy.at(r) << "  " << vec_1.at(r).real() << "   " << vec_1.at(r).imag() << "\n";
+			file << parameters.energy[r] << "  " << vec_1[r].real() << "   " << vec_1[r].imag() << "\n";
 		}
 		file.close();					
 	}
@@ -149,10 +149,10 @@ double kramer_kronig_relation(const Parameters &parameters, std::vector<double> 
     double se_real = 0;
     for (int i = 0; i < parameters.steps; i++) {
         if (i != r) {
-            se_real += impurity_self_energy_imag.at(i) / (parameters.energy.at(i) - parameters.energy.at(r));
+            se_real += impurity_self_energy_imag[i] / (parameters.energy[i] - parameters.energy[r]);
         }
     }
-	return se_real * (parameters.energy.at(1) - parameters.energy.at(0)) / M_PI;
+	return se_real * (parameters.energy[1] - parameters.energy[0]) / M_PI;
 }
 
 double absolute_value(double num1) {
@@ -165,23 +165,23 @@ void distribute_to_procs(const Parameters &parameters, std::vector<dcomp> &vec_1
 		if (parameters.myid == 0) {
 			//std::cout << "rank " << parameters.myid << " enters where parameters.myid == 0 \n";
 			for (int r = 0; r < parameters.steps_myid; r ++){
-				vec_1.at(r) = vec_2.at(r);  
+				vec_1[r] = vec_2[r];  
 			}
 			for (int a = 1; a < parameters.size; a++){
-				MPI_Recv(&vec_1.at(parameters.start.at(a)), parameters.steps_proc.at(a), MPI_DOUBLE_COMPLEX, a, 200, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+				MPI_Recv(&vec_1[parameters.start[a]], parameters.steps_proc[a], MPI_DOUBLE_COMPLEX, a, 200, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 				//std::cout << "I, rank 0, recieved part of vec_1 from rank " << a << std::endl; 
-				//for (int r = parameters.start.at(a); r < parameters.start.at(a) + parameters.steps_proc.at(a); r ++){
-				//	std::cout << "This part has a value of " << vec_1.at(r) << " " << r << std::endl; 
+				//for (int r = parameters.start[a]; r < parameters.start[a] + parameters.steps_proc[a]; r ++){
+				//	std::cout << "This part has a value of " << vec_1[r] << " " << r << std::endl; 
 				//}
 			}
 		} else {
 			//std::cout << "rank " << parameters.myid << " enters where parameters.myid != 0 \n";
-			MPI_Send(&(vec_2.at(0)), parameters.steps_myid, MPI_DOUBLE_COMPLEX, 0, 200, MPI_COMM_WORLD);
+			MPI_Send(&(vec_2[0]), parameters.steps_myid, MPI_DOUBLE_COMPLEX, 0, 200, MPI_COMM_WORLD);
 			//std::cout << "I, rank " << parameters.myid << " sent my part of the GF to rank 0 \n"; 
 		}
 
 		MPI_Barrier(MPI_COMM_WORLD);
-		MPI_Bcast(&(vec_1.at(0)), parameters.steps, MPI_DOUBLE_COMPLEX, 0, MPI_COMM_WORLD);
+		MPI_Bcast(&(vec_1[0]), parameters.steps, MPI_DOUBLE_COMPLEX, 0, MPI_COMM_WORLD);
 
 }
 
@@ -190,21 +190,21 @@ void distribute_to_procs(const Parameters &parameters, std::vector<double> &vec_
 		if (parameters.myid == 0) {
 			//std::cout << "rank " << parameters.myid << " enters where parameters.myid == 0 \n";
 			for (int r = 0; r < parameters.steps_myid; r ++){
-				vec_1.at(r) = vec_2.at(r);  
+				vec_1[r] = vec_2[r];  
 			}
 			for (int a = 1; a < parameters.size; a++){
-				MPI_Recv(&vec_1.at(parameters.start.at(a)), parameters.steps_proc.at(a), MPI_DOUBLE, a, 200, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-				//for (int r = parameters.start.at(a); r < parameters.start.at(a) + parameters.steps_proc.at(a); r ++){
-				//	std::cout << "This part has a value of " << vec_1.at(r) << " " << r << std::endl; 
+				MPI_Recv(&vec_1[parameters.start[a]], parameters.steps_proc[a], MPI_DOUBLE, a, 200, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+				//for (int r = parameters.start[a]; r < parameters.start[a] + parameters.steps_proc[a]; r ++){
+				//	std::cout << "This part has a value of " << vec_1[r] << " " << r << std::endl; 
 				//}
 			}
 		} else {
 			//std::cout << "rank " << parameters.myid << " enters where parameters.myid != 0 \n";
-			MPI_Send(&(vec_2.at(0)), parameters.steps_myid, MPI_DOUBLE, 0, 200, MPI_COMM_WORLD);
+			MPI_Send(&(vec_2[0]), parameters.steps_myid, MPI_DOUBLE, 0, 200, MPI_COMM_WORLD);
 		}
 
 		MPI_Barrier(MPI_COMM_WORLD);
-		MPI_Bcast(&(vec_1.at(0)), parameters.steps, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+		MPI_Bcast(&(vec_1[0]), parameters.steps, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 }
 
 MatrixVectorType initializeMatrixVector(int size, int rows, int cols) {

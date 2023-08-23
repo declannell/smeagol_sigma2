@@ -15,22 +15,22 @@ void get_current(Parameters &parameters, MatrixVectorType &gf_int_r, MatrixVecto
         dcomp integrand_myid = 0.0, integrand = 0.0;
         if (left_right == 0) {
             for (int r = 0; r < parameters.steps_myid; r++) {
-                int y = r + parameters.start.at(parameters.myid);
-                Eigen::MatrixXcd gf_int_a = gf_int_r.at(r).adjoint(); 
-                Eigen::MatrixXcd spectral_function = parameters.j1 * (gf_int_r.at(r) - gf_int_a);
-                Eigen::MatrixXcd trace =  fermi_function(parameters.energy.at(y) - parameters.voltage, parameters) *
-                        gamma.at(r) * spectral_function + parameters.j1 * gamma.at(r) * gf_int_l.at(r);
+                int y = r + parameters.start[parameters.myid];
+                Eigen::MatrixXcd gf_int_a = gf_int_r[r].adjoint(); 
+                Eigen::MatrixXcd spectral_function = parameters.j1 * (gf_int_r[r] - gf_int_a);
+                Eigen::MatrixXcd trace =  fermi_function(parameters.energy[y] - parameters.voltage, parameters) *
+                        gamma[r] * spectral_function + parameters.j1 * gamma[r] * gf_int_l[r];
 
                 integrand_myid += trace.trace();
             }
             MPI_Allreduce(&integrand_myid, &integrand, 1, MPI_DOUBLE_COMPLEX, MPI_SUM, MPI_COMM_WORLD);
         } else {
             for (int r = 0; r < parameters.steps_myid; r++) {
-                int y = r + parameters.start.at(parameters.myid);
-                Eigen::MatrixXcd gf_int_a = gf_int_r.at(r).adjoint(); 
-                Eigen::MatrixXcd spectral_function = parameters.j1 * (gf_int_r.at(r) - gf_int_a);
-                Eigen::MatrixXcd trace =  fermi_function(parameters.energy.at(y) + parameters.voltage, parameters) *
-                        gamma.at(r) * spectral_function + parameters.j1 * gamma.at(r) * gf_int_l.at(r);
+                int y = r + parameters.start[parameters.myid];
+                Eigen::MatrixXcd gf_int_a = gf_int_r[r].adjoint(); 
+                Eigen::MatrixXcd spectral_function = parameters.j1 * (gf_int_r[r] - gf_int_a);
+                Eigen::MatrixXcd trace =  fermi_function(parameters.energy[y] + parameters.voltage, parameters) *
+                        gamma[r] * spectral_function + parameters.j1 * gamma[r] * gf_int_l[r];
                 integrand_myid += trace.trace();
             }
             MPI_Allreduce(&integrand_myid, &integrand, 1, MPI_DOUBLE_COMPLEX, MPI_SUM, MPI_COMM_WORLD);
@@ -51,12 +51,12 @@ void get_current(Parameters &parameters, MatrixVectorType &gf_int_r, MatrixVecto
 //    //std::cout << var_right << std::endl;
 //	my_file.open(var);
 //    for (int r =0; r < parameters.steps_myid; r++) {
-//        int y = r + parameters.start.at(parameters.myid);
-//        Eigen::MatrixXcd gf_int_a = gf_int_r.at(r).adjoint();
-//        dcomp transmission = (gamma_l.at(r) * gf_int_r.at(r) * gamma_r.at(r) * gf_int_a).trace();
-//        my_file << parameters.energy.at(r) << "  " << transmission.real() << "  " << transmission.imag() << "\n";
-//        integrand_myid += transmission.real() * (fermi_function(parameters.energy.at(y) - parameters.voltage, parameters) - 
-//            fermi_function(parameters.energy.at(y) + parameters.voltage, parameters));
+//        int y = r + parameters.start[parameters.myid];
+//        Eigen::MatrixXcd gf_int_a = gf_int_r[r].adjoint();
+//        dcomp transmission = (gamma_l[r] * gf_int_r[r] * gamma_r[r] * gf_int_a).trace();
+//        my_file << parameters.energy[r] << "  " << transmission.real() << "  " << transmission.imag() << "\n";
+//        integrand_myid += transmission.real() * (fermi_function(parameters.energy[y] - parameters.voltage, parameters) - 
+//            fermi_function(parameters.energy[y] + parameters.voltage, parameters));
 //    }
 //    my_file.close();
 //    MPI_Allreduce(&integrand_myid, &integrand, 1, MPI_DOUBLE_COMPLEX, MPI_SUM, MPI_COMM_WORLD);
@@ -75,12 +75,12 @@ void get_current_transmission(Parameters &parameters, MatrixVectorType &gf_int_r
     //std::cout << var_right << std::endl;
     my_file.open(var);
     for (int r =0; r < parameters.steps_myid; r++) {
-        int y = r + parameters.start.at(parameters.myid);
-        Eigen::MatrixXcd gf_int_a = gf_int_r.at(r).adjoint();
-        dcomp transmission = (gamma_l.at(r) * gf_int_r.at(r) * gamma_r.at(r) * gf_int_a).trace();
-        my_file << parameters.energy.at(r) << "  " << transmission.real() << "  " << transmission.imag() << "\n";
-        integrand_myid += transmission.real() * (fermi_function(parameters.energy.at(y) - parameters.voltage, parameters) -
-            fermi_function(parameters.energy.at(y) + parameters.voltage, parameters));
+        int y = r + parameters.start[parameters.myid];
+        Eigen::MatrixXcd gf_int_a = gf_int_r[r].adjoint();
+        dcomp transmission = (gamma_l[r] * gf_int_r[r] * gamma_r[r] * gf_int_a).trace();
+        my_file << parameters.energy[r] << "  " << transmission.real() << "  " << transmission.imag() << "\n";
+        integrand_myid += transmission.real() * (fermi_function(parameters.energy[y] - parameters.voltage, parameters) -
+            fermi_function(parameters.energy[y] + parameters.voltage, parameters));
     }
     my_file.close();
     MPI_Allreduce(&integrand_myid, &integrand, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);

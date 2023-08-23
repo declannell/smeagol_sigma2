@@ -59,14 +59,14 @@ void read_non_interacting_gf(Parameters &parameters, MatrixVectorType &gf_non_in
                 while (std::getline(my_file, line)) {
                     lineCount++;
                     if (lineCount % parameters.grid_density == 0) {//this selects every 10th lines
-                        if ((energy_index >= parameters.start.at(parameters.myid)) && (energy_index < parameters.start.at(parameters.myid) + parameters.steps_myid)) {
+                        if ((energy_index >= parameters.start[parameters.myid]) && (energy_index < parameters.start[parameters.myid] + parameters.steps_myid)) {
                             //this selects the appriotate lines for each process
                             std::istringstream iss(line);
                             double num1, num2, num3;
                             if (iss >> num1 >> num2 >> num3) {
                                 // Use the values stored in num1, num2, and num3
-                                int y = energy_index - parameters.start.at(parameters.myid);
-                                gf_non_int_r.at(y)(i, j) = num2 + parameters.j1 * num3;
+                                int y = energy_index - parameters.start[parameters.myid];
+                                gf_non_int_r[y](i, j) = num2 + parameters.j1 * num3;
                             } else {
                                 std::cout << "Invalid line format: " << line << std::endl;
                             }
@@ -97,14 +97,14 @@ void read_non_interacting_gf(Parameters &parameters, MatrixVectorType &gf_non_in
 //                while (std::getline(my_file, line)) {
 //                    lineCount++;
 //                    if (lineCount % parameters.grid_density == 0) {//this selects every 10th lines
-//                        if ((energy_index >= parameters.start.at(parameters.myid)) && (energy_index < parameters.start.at(parameters.myid) + parameters.steps_myid)) {
+//                        if ((energy_index >= parameters.start[parameters.myid]) && (energy_index < parameters.start[parameters.myid] + parameters.steps_myid)) {
 //                            //this selects the appriotate lines for each process
 //                            std::istringstream iss(line);
 //                            double num1, num2, num3;
 //                            if (iss >> num1 >> num2 >> num3) {
 //                                // Use the values stored in num1, num2, and num3
-//                                int y = energy_index - parameters.start.at(parameters.myid);
-//                                gf_non_int_r.at(y)(i, j) = num2 + parameters.j1 * num3;
+//                                int y = energy_index - parameters.start[parameters.myid];
+//                                gf_non_int_r[y](i, j) = num2 + parameters.j1 * num3;
 //
 //                            } else {
 //                                std::cout << "Invalid line format: " << line << std::endl;
@@ -137,14 +137,14 @@ void read_delta(Parameters &parameters, MatrixVectorType &delta, int spin) {
     while (std::getline(file, line)) {
         lineCount++;
         if (lineCount % parameters.grid_density == 0) {//this selects every 10th lines
-            if ((energy_index >= parameters.start.at(parameters.myid)) && (energy_index < parameters.start.at(parameters.myid) + parameters.steps_myid)) {
+            if ((energy_index >= parameters.start[parameters.myid]) && (energy_index < parameters.start[parameters.myid] + parameters.steps_myid)) {
                 //this selects the appriotate lines for each process
                 std::istringstream iss(line);
                 double num1, num2, num3;
                 if (iss >> num1 >> num2 >> num3) {
                     // Use the values stored in num1, num2, and num3
-                    int y = energy_index - parameters.start.at(parameters.myid);
-                    delta.at(y)(0, 0) = num2 + parameters.j1 * num3;
+                    int y = energy_index - parameters.start[parameters.myid];
+                    delta[y](0, 0) = num2 + parameters.j1 * num3;
                 } else {
                     std::cout << "Invalid line format: " << line << std::endl;
                 }
@@ -175,14 +175,14 @@ void read_gamma(Parameters &parameters, MatrixVectorType &gamma_left, MatrixVect
                 while (std::getline(my_file_left, line)) {
                     lineCount++;
                     if (lineCount % parameters.grid_density == 0) {//this selects every 10th lines
-                        if ((energy_index >= parameters.start.at(parameters.myid)) && (energy_index < parameters.start.at(parameters.myid) + parameters.steps_myid)) {
+                        if ((energy_index >= parameters.start[parameters.myid]) && (energy_index < parameters.start[parameters.myid] + parameters.steps_myid)) {
                             //this selects the appriotate lines for each process
                             std::istringstream iss(line);
                             double num1, num2, num3;
                             if (iss >> num1 >> num2 >> num3) {
                                 // Use the values stored in num1, num2, and num3
-                                int y = energy_index - parameters.start.at(parameters.myid);
-                                gamma_left.at(y)(i, j) = num2 + parameters.j1 * num3;
+                                int y = energy_index - parameters.start[parameters.myid];
+                                gamma_left[y](i, j) = num2 + parameters.j1 * num3;
                             } else {
                                 std::cout << "Invalid line format: " << line << std::endl;
                             }
@@ -205,14 +205,14 @@ void read_gamma(Parameters &parameters, MatrixVectorType &gamma_left, MatrixVect
                 while (std::getline(my_file_right, line)) {
                     lineCount++;
                     if (lineCount % parameters.grid_density == 0) {//this selects every 10th lines
-                        if ((energy_index >= parameters.start.at(parameters.myid)) && (energy_index < parameters.start.at(parameters.myid) + parameters.steps_myid)) {
+                        if ((energy_index >= parameters.start[parameters.myid]) && (energy_index < parameters.start[parameters.myid] + parameters.steps_myid)) {
                             //this selects the appriotate lines for each process
                             std::istringstream iss(line);
                             double num1, num2, num3;
                             if (iss >> num1 >> num2 >> num3) {
                                 // Use the values stored in num1, num2, and num3
-                                int y = energy_index - parameters.start.at(parameters.myid);
-                                gamma_right.at(y)(i, j) = num2 + parameters.j1 * num3;
+                                int y = energy_index - parameters.start[parameters.myid];
+                                gamma_right[y](i, j) = num2 + parameters.j1 * num3;
                             } else {
                                 std::cout << "Invalid line format: " << line << std::endl;
                             }
@@ -227,8 +227,8 @@ void read_gamma(Parameters &parameters, MatrixVectorType &gamma_left, MatrixVect
     } else if (parameters.model_calc == 0) {
         for (int r = 0; r < parameters.steps_myid; r++) {
             for (int i = 0; i < parameters.num_orb_total; i++) {
-                gamma_left.at(r)(i, i) = - 2.0 * parameters.gamma;
-                gamma_right.at(r)(i, i) = - 2.0 * parameters.gamma;
+                gamma_left[r](i, i) = - 2.0 * parameters.gamma;
+                gamma_right[r](i, i) = - 2.0 * parameters.gamma;
             }
         }
     }   
@@ -267,8 +267,8 @@ void get_interacting_retarded_gf(const Parameters &parameters, MatrixVectorType 
     const MatrixVectorType &sigma_mb_r, const MatrixVectorType &embedding_r, const MatrixVectorType &embedding_l) {
     if (parameters.read_gf == 1) {
         for (int r = 0; r < parameters.steps_myid; r++) {
-            MatrixType inverse_gf = (gf_int_r.at(r).inverse() - sigma_mb_r.at(r));
-            gf_int_r.at(r) = inverse_gf.inverse();
+            MatrixType inverse_gf = (gf_int_r[r].inverse() - sigma_mb_r[r]);
+            gf_int_r[r] = inverse_gf.inverse();
         }
         if (parameters.myid == 0) std::cout << "Got interacting green function from Dyson equation\n";
     } else {
@@ -278,9 +278,9 @@ void get_interacting_retarded_gf(const Parameters &parameters, MatrixVectorType 
         }
         Eigen::MatrixXcd gf_inverse(parameters.num_orbitals, parameters.num_orbitals);
         for (int r = 0; r < parameters.steps_myid; r++) {
-            int y = parameters.start.at(parameters.myid) + r;
-            gf_inverse(0, 0) = parameters.energy.at(y) - hamiltonian(0, 0) - embedding_r.at(r)(0, 0) - embedding_l.at(r)(0, 0) - sigma_mb_r.at(r)(0, 0);
-            gf_int_r.at(r) = gf_inverse.inverse();
+            int y = parameters.start[parameters.myid] + r;
+            gf_inverse(0, 0) = parameters.energy[y] - hamiltonian(0, 0) - embedding_r[r](0, 0) - embedding_l[r](0, 0) - sigma_mb_r[r](0, 0);
+            gf_int_r[r] = gf_inverse.inverse();
         }   
         if (parameters.myid == 0) std::cout << "Got interacting green function from the hamiltonian and self energies\n";
     }
@@ -290,18 +290,18 @@ void get_interacting_retarded_gf(const Parameters &parameters, MatrixVectorType 
     const MatrixVectorType &sigma_mb_r, const MatrixVectorType &delta) {
     Eigen::MatrixXcd gf_inverse(parameters.num_orbitals, parameters.num_orbitals);
     for (int r = 0; r < parameters.steps_myid; r++) {
-        int y = parameters.start.at(parameters.myid) + r;
-        gf_inverse(0, 0) = parameters.energy.at(y) - hamiltonian(0, 0) - delta.at(r)(0, 0);
-        gf_int_r.at(r) = gf_inverse.inverse();
+        int y = parameters.start[parameters.myid] + r;
+        gf_inverse(0, 0) = parameters.energy[y] - hamiltonian(0, 0) - delta[r](0, 0);
+        gf_int_r[r] = gf_inverse.inverse();
     }
 }
 
 void get_model_gf(const Parameters &parameters, MatrixVectorType &gf_int_r, const MatrixVectorType &sigma_mb_r,
     const MatrixVectorType &embedding_r, const MatrixVectorType &embedding_l) {
     for (int r = 0; r < parameters.steps_myid; r++) {
-        int y = r + parameters.start.at(parameters.myid);
-        gf_int_r.at(r)(0, 0) = 1.0 / (parameters.energy.at(y) + parameters.j1 * parameters.convergence - 
-            parameters.onsite - sigma_mb_r.at(r)(0, 0) - embedding_l.at(r)(0, 0) - embedding_r.at(r)(0, 0));
+        int y = r + parameters.start[parameters.myid];
+        gf_int_r[r](0, 0) = 1.0 / (parameters.energy[y] + parameters.j1 * parameters.convergence - 
+            parameters.onsite - sigma_mb_r[r](0, 0) - embedding_l[r](0, 0) - embedding_r[r](0, 0));
     }
 }
 
@@ -309,14 +309,14 @@ void get_lesser_se(Parameters &parameters, MatrixVectorType &se_lesser, MatrixVe
     if (left_right == 0) {
         //cout << "getting a left self energy \n";
         for (int r = 0; r < parameters.steps_myid; r++) {
-            int y = r + parameters.start.at(parameters.myid);
-            se_lesser.at(r) = parameters.j1 * fermi_function(parameters.energy.at(y) - parameters.voltage, parameters) * gamma.at(r);
+            int y = r + parameters.start[parameters.myid];
+            se_lesser[r] = parameters.j1 * fermi_function(parameters.energy[y] - parameters.voltage, parameters) * gamma[r];
         }
     } else {
         //cout << "getting a right self energy \n";
         for (int r = 0; r < parameters.steps_myid; r++) {
-            int y = r + parameters.start.at(parameters.myid);
-            se_lesser.at(r) = parameters.j1 * fermi_function(parameters.energy.at(y) + parameters.voltage, parameters) * gamma.at(r);
+            int y = r + parameters.start[parameters.myid];
+            se_lesser[r] = parameters.j1 * fermi_function(parameters.energy[y] + parameters.voltage, parameters) * gamma[r];
         }
     }
 }
@@ -325,21 +325,21 @@ void get_retarded_se(Parameters &parameters, MatrixVectorType &se_retarded, Matr
     if (parameters.model_calc == 0) {//this is a model calculation
         for (int r = 0; r < parameters.steps_myid; r++) {
             //double random = double((rand() % 1000)) / 1000 * 0;
-            se_retarded.at(r)(0, 0) = - parameters.j1 * (gamma.at(r)(0, 0).real() / (2.0));
+            se_retarded[r](0, 0) = - parameters.j1 * (gamma[r](0, 0).real() / (2.0));
         }
     } else if (parameters.model_calc == 1) {//this is an ab initio calculation
         std::vector<double> imag_self_energy_myid(parameters.steps_myid), imag_self_energy(parameters.steps);
         for (int r = 0; r < parameters.steps_myid; r++){
-            imag_self_energy_myid.at(r) = - gamma.at(r)(0, 0).real() / (2.0);
+            imag_self_energy_myid[r] = - gamma[r](0, 0).real() / (2.0);
         }
 
-        MPI_Allgatherv(&(imag_self_energy_myid.at(0)), parameters.steps_myid, MPI_DOUBLE, &(imag_self_energy.at(0)),
-	     &(parameters.steps_proc.at(0)), &(parameters.displs.at(0)), MPI_DOUBLE, MPI_COMM_WORLD);
+        MPI_Allgatherv(&(imag_self_energy_myid[0]), parameters.steps_myid, MPI_DOUBLE, &(imag_self_energy[0]),
+	     &(parameters.steps_proc[0]), &(parameters.displs[0]), MPI_DOUBLE, MPI_COMM_WORLD);
 
 	    for (int r = 0; r < parameters.steps_myid; r++) {
-	    	int y = r + parameters.start.at(parameters.myid); 
+	    	int y = r + parameters.start[parameters.myid]; 
 	    	double impurity_self_energy_real_myid = kramer_kronig_relation(parameters, imag_self_energy, y);
-	    	se_retarded.at(r)(0, 0) = impurity_self_energy_real_myid + parameters.j1 * imag_self_energy_myid.at(r);
+	    	se_retarded[r](0, 0) = impurity_self_energy_real_myid + parameters.j1 * imag_self_energy_myid[r];
 	    }
     }
 }
@@ -348,7 +348,7 @@ void get_lesser_gf(Parameters &parameters, MatrixVectorType &gf_int_r, MatrixVec
      MatrixVectorType &se_right, MatrixVectorType &sigma_mb_l, MatrixVectorType &gf_int_l) {
     
     for(int r = 0; r < parameters.steps_myid; r++) {
-        Eigen::MatrixXcd gf_int_a = gf_int_r.at(r).adjoint(); 
-        gf_int_l.at(r) = gf_int_r.at(r) * (se_left.at(r) + se_right.at(r) + sigma_mb_l.at(r)) * gf_int_a;
+        Eigen::MatrixXcd gf_int_a = gf_int_r[r].adjoint(); 
+        gf_int_l[r] = gf_int_r[r] * (se_left[r] + se_right[r] + sigma_mb_l[r]) * gf_int_a;
     } 
 }

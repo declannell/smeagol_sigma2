@@ -22,7 +22,7 @@ dcomp integrate(const Parameters& parameters, const std::vector<dcomp>& gf_1, co
 				//I say the green function is zero outside e_lower_bound and e_upper_bound. This means I need the final green function in the integral to be within an energy of e_lower_bound
 				//and e_upper_bound. The index of 0 corresponds to e_lower_bound. Hence we need i+J-r>0 but in order to be less an energy of e_upper_bound we need i+j-r<steps.
 				//These conditions ensure the enrgy of the gf3 greens function to be within (e_upper_bound, e_lower_bound)
-				result += (parameters.delta_energy / (2.0 * M_PI)) * (parameters.delta_energy / (2.0 * M_PI)) * gf_1.at(i) * gf_2.at(j) * gf_3.at(i + j - r);
+				result += (parameters.delta_energy / (2.0 * M_PI)) * (parameters.delta_energy / (2.0 * M_PI)) * gf_1[i] * gf_2[j] * gf_3[i + j - r];
 			}
 		}
 	}
@@ -37,49 +37,49 @@ void self_energy_2nd_order(const Parameters& parameters, AIM &aim_up, AIM &aim_d
 		gf_greater_down_myid(parameters.steps_myid);
 
 	for (int r = 0; r < parameters.steps_myid; r++) {
-		advanced_down_myid.at(r) = std::conj(aim_down.impurity_gf_mb_retarded.at(r));
-		gf_greater_down_myid.at(r) = aim_down.impurity_gf_mb_lesser.at(r) + aim_down.impurity_gf_mb_retarded.at(r) 
-			- std::conj(aim_down.impurity_gf_mb_retarded.at(r));
+		advanced_down_myid[r] = std::conj(aim_down.impurity_gf_mb_retarded[r]);
+		gf_greater_down_myid[r] = aim_down.impurity_gf_mb_lesser[r] + aim_down.impurity_gf_mb_retarded[r] 
+			- std::conj(aim_down.impurity_gf_mb_retarded[r]);
 	}
 
-    MPI_Allgatherv(&(aim_up.impurity_gf_mb_retarded.at(0)), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(gf_retarded_up.at(0)),
-	 &(parameters.steps_proc.at(0)), &(parameters.displs.at(0)), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
+    MPI_Allgatherv(&(aim_up.impurity_gf_mb_retarded[0]), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(gf_retarded_up[0]),
+	 &(parameters.steps_proc[0]), &(parameters.displs[0]), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
 
-    MPI_Allgatherv(&(aim_down.impurity_gf_mb_retarded.at(0)), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(gf_retarded_down.at(0)),
-	 &(parameters.steps_proc.at(0)), &(parameters.displs.at(0)), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
+    MPI_Allgatherv(&(aim_down.impurity_gf_mb_retarded[0]), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(gf_retarded_down[0]),
+	 &(parameters.steps_proc[0]), &(parameters.displs[0]), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
 
-    MPI_Allgatherv(&(advanced_down_myid.at(0)), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(advanced_down.at(0)),
-	 &(parameters.steps_proc.at(0)), &(parameters.displs.at(0)), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
+    MPI_Allgatherv(&(advanced_down_myid[0]), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(advanced_down[0]),
+	 &(parameters.steps_proc[0]), &(parameters.displs[0]), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
 	
-    MPI_Allgatherv(&(aim_down.impurity_gf_mb_lesser.at(0)), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(gf_lesser_down.at(0)),
-	 &(parameters.steps_proc.at(0)), &(parameters.displs.at(0)), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
+    MPI_Allgatherv(&(aim_down.impurity_gf_mb_lesser[0]), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(gf_lesser_down[0]),
+	 &(parameters.steps_proc[0]), &(parameters.displs[0]), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
 
-    MPI_Allgatherv(&(aim_up.impurity_gf_mb_lesser.at(0)), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(gf_lesser_up.at(0)),
-	 &(parameters.steps_proc.at(0)), &(parameters.displs.at(0)), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
+    MPI_Allgatherv(&(aim_up.impurity_gf_mb_lesser[0]), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(gf_lesser_up[0]),
+	 &(parameters.steps_proc[0]), &(parameters.displs[0]), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
 
-    MPI_Allgatherv(&(gf_greater_down_myid.at(0)), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(gf_greater_down.at(0)),
-	 &(parameters.steps_proc.at(0)), &(parameters.displs.at(0)), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
+    MPI_Allgatherv(&(gf_greater_down_myid[0]), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(gf_greater_down[0]),
+	 &(parameters.steps_proc[0]), &(parameters.displs[0]), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
 	
-	print_to_file(parameters,"gf_retarded_up", gf_retarded_up, 1);
-	print_to_file(parameters,"advanced_down", advanced_down, 1);
-	print_to_file(parameters,"gf_lesser_down", gf_lesser_down, 1);
-	print_to_file(parameters,"gf_greater_down", gf_greater_down, 1);
+	//print_to_file(parameters,"gf_retarded_up", gf_retarded_up, 1);
+	//print_to_file(parameters,"advanced_down", advanced_down, 1);
+	//print_to_file(parameters,"gf_lesser_down", gf_lesser_down, 1);
+	//print_to_file(parameters,"gf_greater_down", gf_greater_down, 1);
 
 
 	for (int r = 0; r < parameters.steps_myid; r++){
-		int y = r + parameters.start.at(parameters.myid);
+		int y = r + parameters.start[parameters.myid];
 		//std::cout << "The energy index is " << y << std::endl;
 		
-		aim_up.self_energy_mb_retarded.at(r) = aim_up.self_energy_mb_retarded.at(r) * (1.0 - parameters.se_mixing) + parameters.se_mixing * parameters.hubbard_interaction * parameters.hubbard_interaction
+		aim_up.self_energy_mb_retarded[r] = aim_up.self_energy_mb_retarded[r] * (1.0 - parameters.se_mixing) + parameters.se_mixing * parameters.hubbard_interaction * parameters.hubbard_interaction
 		    * integrate(parameters, gf_retarded_up, gf_retarded_down, gf_lesser_down, y); //this resets the self energy	
-		aim_up.self_energy_mb_retarded.at(r) += parameters.se_mixing * parameters.hubbard_interaction * parameters.hubbard_interaction
+		aim_up.self_energy_mb_retarded[r] += parameters.se_mixing * parameters.hubbard_interaction * parameters.hubbard_interaction
 		    * integrate(parameters, gf_retarded_up, gf_lesser_down, gf_lesser_down, y); 
-		aim_up.self_energy_mb_retarded.at(r) += parameters.se_mixing * parameters.hubbard_interaction * parameters.hubbard_interaction
+		aim_up.self_energy_mb_retarded[r] += parameters.se_mixing * parameters.hubbard_interaction * parameters.hubbard_interaction
 		    * integrate(parameters, gf_lesser_up, gf_retarded_down, gf_lesser_down, y); 
-		aim_up.self_energy_mb_retarded.at(r) += parameters.se_mixing * parameters.hubbard_interaction * parameters.hubbard_interaction
+		aim_up.self_energy_mb_retarded[r] += parameters.se_mixing * parameters.hubbard_interaction * parameters.hubbard_interaction
 		    * integrate(parameters, gf_lesser_up, gf_lesser_down, advanced_down, y); 
 
-		aim_up.self_energy_mb_lesser.at(r) = (1.0 - parameters.se_mixing) * aim_up.self_energy_mb_lesser.at(r) + parameters.se_mixing * (parameters.hubbard_interaction * parameters.hubbard_interaction
+		aim_up.self_energy_mb_lesser[r] = (1.0 - parameters.se_mixing) * aim_up.self_energy_mb_lesser[r] + parameters.se_mixing * (parameters.hubbard_interaction * parameters.hubbard_interaction
 		    * integrate(parameters, gf_lesser_up, gf_lesser_down, gf_greater_down, y)); 	
 	}
 }
@@ -88,7 +88,7 @@ double get_prefactor(const int i, const int j, const int r, const Parameters &pa
 	 std::vector<double> &fermi_up, std::vector<double> &fermi_down)
 {
 	int a = i + j - r;
-	return fermi_up.at(i) * fermi_down.at(j) + fermi_down.at(a) * (1.0 - fermi_up.at(i) - fermi_down.at(j));
+	return fermi_up[i] * fermi_down[j] + fermi_down[a] * (1.0 - fermi_up[i] - fermi_down[j]);
 }
 
 double integrate_equilibrium(const Parameters& parameters, const std::vector<double>& gf_1, const std::vector<double>& gf_2, 
@@ -104,7 +104,7 @@ double integrate_equilibrium(const Parameters& parameters, const std::vector<dou
 				//I say the green function is zero outside e_lower_bound and e_upper_bound. This means I need the final green function in the integral to be within an energy of e_lower_bound
 				//and e_upper_bound. The index of 0 corresponds to e_lower_bound. Hence we need i+J-r>0 but in order to be less an energy of e_upper_bound we need i+j-r<steps.
 				//These conditions ensure the enrgy of the gf3 greens function to be within (e_upper_bound, e_lower_bound)
-				result += prefactor * (parameters.delta_energy / (M_PI)) * (parameters.delta_energy / (M_PI)) * gf_1.at(i) * gf_2.at(j) * gf_3.at(i + j - r);
+				result += prefactor * (parameters.delta_energy / (M_PI)) * (parameters.delta_energy / (M_PI)) * gf_1[i] * gf_2[j] * gf_3[i + j - r];
 			}
 		}
 	}
@@ -125,9 +125,9 @@ double integrate_equilibrium(const Parameters& parameters, const std::vector<dou
 //	std::vector<dcomp> gf_lesser_up_myid(parameters.steps_myid), gf_lesser_down_myid(parameters.steps_myid), gf_greater_down_myid(parameters.steps_myid);
 //	
 //	for (int r = 0; r < parameters.steps_myid; r++) {
-//		gf_lesser_down_myid.at(r) = aim_down.dynamical_field_lesser.at(r);
-//		gf_lesser_up_myid.at(r) = aim_up.dynamical_field_lesser.at(r);
-//		gf_greater_down_myid.at(r) = aim_down.dynamical_field_lesser.at(r) + aim_down.dynamical_field_retarded.at(r) - std::conj(aim_down.dynamical_field_retarded.at(r));
+//		gf_lesser_down_myid[r] = aim_down.dynamical_field_lesser[r];
+//		gf_lesser_up_myid[r] = aim_up.dynamical_field_lesser[r];
+//		gf_greater_down_myid[r] = aim_down.dynamical_field_lesser[r] + aim_down.dynamical_field_retarded[r] - std::conj(aim_down.dynamical_field_retarded[r]);
 //	}	
 //
 //	distribute_to_procs(parameters, gf_lesser_up, gf_lesser_up_myid);
@@ -138,19 +138,19 @@ double integrate_equilibrium(const Parameters& parameters, const std::vector<dou
 //	std::vector<double> impurity_gf_up_imag_myid(parameters.steps_myid), impurity_gf_down_imag_myid(parameters.steps_myid);
 //
 //	for (int r = 0; r < parameters.steps_myid; r++) {
-//		impurity_gf_up_imag_myid.at(r) = aim_up.dynamical_field_retarded.at(r).imag();
-//		impurity_gf_down_imag_myid.at(r) = aim_down.dynamical_field_retarded.at(r).imag();
+//		impurity_gf_up_imag_myid[r] = aim_up.dynamical_field_retarded[r].imag();
+//		impurity_gf_down_imag_myid[r] = aim_down.dynamical_field_retarded[r].imag();
 //    }
 //
 //	distribute_to_procs(parameters, impurity_gf_up_imag, impurity_gf_up_imag_myid);
 //	distribute_to_procs(parameters, impurity_gf_down_imag, impurity_gf_down_imag_myid);	
 //
 //	for (int r = 0; r < parameters.steps_myid; r++){
-//		int y = r + parameters.start.at(parameters.myid);
-//		impurity_self_energy_imag_myid.at(r) = parameters.hubbard_interaction * parameters.hubbard_interaction
+//		int y = r + parameters.start[parameters.myid];
+//		impurity_self_energy_imag_myid[r] = parameters.hubbard_interaction * parameters.hubbard_interaction
 //		    * integrate_equilibrium(parameters, impurity_gf_up_imag, impurity_gf_down_imag, impurity_gf_down_imag, y, fermi_eff_up, fermi_eff_down); 	
 //		
-//		aim_up.self_energy_mb_lesser.at(r) = (parameters.hubbard_interaction * parameters.hubbard_interaction * (integrate(parameters, gf_lesser_up,
+//		aim_up.self_energy_mb_lesser[r] = (parameters.hubbard_interaction * parameters.hubbard_interaction * (integrate(parameters, gf_lesser_up,
 //			gf_lesser_down, gf_greater_down, y))); 
 //	}
 //
@@ -158,9 +158,9 @@ double integrate_equilibrium(const Parameters& parameters, const std::vector<dou
 //	distribute_to_procs(parameters, impurity_self_energy_imag, impurity_self_energy_imag_myid);
 //
 //	for (int r = 0; r < parameters.steps_myid; r++) {
-//		int y = r + parameters.start.at(parameters.myid); 
-//		impurity_self_energy_real_myid.at(r) = kramer_kronig_relation(parameters, impurity_self_energy_imag, y);
-//		aim_up.self_energy_mb_retarded.at(r) = impurity_self_energy_real_myid.at(r) + parameters.j1 * impurity_self_energy_imag_myid.at(r);
+//		int y = r + parameters.start[parameters.myid]; 
+//		impurity_self_energy_real_myid[r] = kramer_kronig_relation(parameters, impurity_self_energy_imag, y);
+//		aim_up.self_energy_mb_retarded[r] = impurity_self_energy_real_myid[r] + parameters.j1 * impurity_self_energy_imag_myid[r];
 //	}
 //}
 //
@@ -177,32 +177,32 @@ void self_energy_2nd_order_kramers_kronig(const Parameters& parameters, AIM &aim
 	//MatrixVectorType test(parameters.steps_myid, Eigen::MatrixXcd::Zero(parameters.num_orbitals, parameters.num_orbitals));
 
 	for (int r = 0; r < parameters.steps_myid; r++) {
-		gf_greater_down_myid.at(r) =  aim_down.dynamical_field_lesser.at(r) 
-			+ aim_down.dynamical_field_retarded.at(r) - std::conj(aim_down.dynamical_field_retarded.at(r));
-		impurity_gf_up_imag_myid.at(r) = aim_up.dynamical_field_retarded.at(r).imag();
-		impurity_gf_down_imag_myid.at(r) = aim_down.dynamical_field_retarded.at(r).imag();
+		gf_greater_down_myid[r] =  aim_down.dynamical_field_lesser[r] 
+			+ aim_down.dynamical_field_retarded[r] - std::conj(aim_down.dynamical_field_retarded[r]);
+		impurity_gf_up_imag_myid[r] = aim_up.dynamical_field_retarded[r].imag();
+		impurity_gf_down_imag_myid[r] = aim_down.dynamical_field_retarded[r].imag();
 	}	
 
-    MPI_Allgatherv(&( aim_up.fermi_function_eff.at(0)), parameters.steps_myid, MPI_DOUBLE, &(fermi_eff_up.at(0)),
-	 &(parameters.steps_proc.at(0)), &(parameters.displs.at(0)), MPI_DOUBLE, MPI_COMM_WORLD);
+    MPI_Allgatherv(&( aim_up.fermi_function_eff[0]), parameters.steps_myid, MPI_DOUBLE, &(fermi_eff_up[0]),
+	 &(parameters.steps_proc[0]), &(parameters.displs[0]), MPI_DOUBLE, MPI_COMM_WORLD);
 
-    MPI_Allgatherv(&( aim_down.fermi_function_eff.at(0)), parameters.steps_myid, MPI_DOUBLE, &(fermi_eff_down.at(0)),
-	 &(parameters.steps_proc.at(0)), &(parameters.displs.at(0)), MPI_DOUBLE, MPI_COMM_WORLD);
+    MPI_Allgatherv(&( aim_down.fermi_function_eff[0]), parameters.steps_myid, MPI_DOUBLE, &(fermi_eff_down[0]),
+	 &(parameters.steps_proc[0]), &(parameters.displs[0]), MPI_DOUBLE, MPI_COMM_WORLD);
 
-    MPI_Allgatherv(&(aim_down.dynamical_field_lesser.at(0)), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(gf_lesser_down.at(0)),
-	 &(parameters.steps_proc.at(0)), &(parameters.displs.at(0)), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
+    MPI_Allgatherv(&(aim_down.dynamical_field_lesser[0]), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(gf_lesser_down[0]),
+	 &(parameters.steps_proc[0]), &(parameters.displs[0]), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
 
-    MPI_Allgatherv(&(aim_up.dynamical_field_lesser.at(0)), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(gf_lesser_up.at(0)),
-	 &(parameters.steps_proc.at(0)), &(parameters.displs.at(0)), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
+    MPI_Allgatherv(&(aim_up.dynamical_field_lesser[0]), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(gf_lesser_up[0]),
+	 &(parameters.steps_proc[0]), &(parameters.displs[0]), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
 
-    MPI_Allgatherv(&(gf_greater_down_myid.at(0)), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(gf_greater_down.at(0)),
-	 &(parameters.steps_proc.at(0)), &(parameters.displs.at(0)), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
+    MPI_Allgatherv(&(gf_greater_down_myid[0]), parameters.steps_myid, MPI_DOUBLE_COMPLEX, &(gf_greater_down[0]),
+	 &(parameters.steps_proc[0]), &(parameters.displs[0]), MPI_DOUBLE_COMPLEX, MPI_COMM_WORLD);
 
-    MPI_Allgatherv(&(impurity_gf_up_imag_myid.at(0)), parameters.steps_myid, MPI_DOUBLE, &(impurity_gf_up_imag.at(0)),
-	 &(parameters.steps_proc.at(0)), &(parameters.displs.at(0)), MPI_DOUBLE, MPI_COMM_WORLD);
+    MPI_Allgatherv(&(impurity_gf_up_imag_myid[0]), parameters.steps_myid, MPI_DOUBLE, &(impurity_gf_up_imag[0]),
+	 &(parameters.steps_proc[0]), &(parameters.displs[0]), MPI_DOUBLE, MPI_COMM_WORLD);
 
-    MPI_Allgatherv(&(impurity_gf_down_imag_myid.at(0)), parameters.steps_myid, MPI_DOUBLE, &(impurity_gf_down_imag.at(0)),
-	 &(parameters.steps_proc.at(0)), &(parameters.displs.at(0)), MPI_DOUBLE, MPI_COMM_WORLD);
+    MPI_Allgatherv(&(impurity_gf_down_imag_myid[0]), parameters.steps_myid, MPI_DOUBLE, &(impurity_gf_down_imag[0]),
+	 &(parameters.steps_proc[0]), &(parameters.displs[0]), MPI_DOUBLE, MPI_COMM_WORLD);
 
 	//print_to_file(parameters, "gf_greater_down", gf_greater_down, 1);
 	//print_to_file(parameters, "impurity_gf_up_imag", impurity_gf_up_imag, 1);
@@ -211,31 +211,31 @@ void self_energy_2nd_order_kramers_kronig(const Parameters& parameters, AIM &aim
 //
 	//if (parameters.myid == 0) {
 	//	for (int r = 0; r < parameters.steps; r++) {
-	//		std::cout << impurity_gf_up_imag.at(r) << std::endl;
+	//		std::cout << impurity_gf_up_imag[r] << std::endl;
 	//	}
 	//}
 
 
 	for (int r = 0; r < parameters.steps_myid; r++){
-		int y = r + parameters.start.at(parameters.myid);
-		impurity_self_energy_imag_myid.at(r) = parameters.hubbard_interaction * parameters.hubbard_interaction
+		int y = r + parameters.start[parameters.myid];
+		impurity_self_energy_imag_myid[r] = parameters.hubbard_interaction * parameters.hubbard_interaction
 		    * integrate_equilibrium(parameters, impurity_gf_up_imag, impurity_gf_down_imag, impurity_gf_down_imag, y, fermi_eff_up, fermi_eff_down); 	
 		
-		aim_up.self_energy_mb_lesser.at(r) = (parameters.hubbard_interaction * parameters.hubbard_interaction * (integrate(parameters, gf_lesser_up,
+		aim_up.self_energy_mb_lesser[r] = (parameters.hubbard_interaction * parameters.hubbard_interaction * (integrate(parameters, gf_lesser_up,
 			gf_lesser_down, gf_greater_down, y))); 
-		//test.at(r)(0, 0) = impurity_self_energy_imag_myid.at(r);
+		//test[r](0, 0) = impurity_self_energy_imag_myid[r];
 	}	
 
 	//print_to_file(parameters, "test", test, 0, 0, 1);
-		//std::cout << aim_up.dynamical_field_retarded.at(r) << " " << impurity_gf_up_imag.at(r) << " " << parameters.energy.at(r) << std::endl;
+		//std::cout << aim_up.dynamical_field_retarded[r] << " " << impurity_gf_up_imag[r] << " " << parameters.energy[r] << std::endl;
 
-    MPI_Allgatherv(&(impurity_self_energy_imag_myid.at(0)), parameters.steps_myid, MPI_DOUBLE, &(impurity_self_energy_imag.at(0)),
-	 &(parameters.steps_proc.at(0)), &(parameters.displs.at(0)), MPI_DOUBLE, MPI_COMM_WORLD);
+    MPI_Allgatherv(&(impurity_self_energy_imag_myid[0]), parameters.steps_myid, MPI_DOUBLE, &(impurity_self_energy_imag[0]),
+	 &(parameters.steps_proc[0]), &(parameters.displs[0]), MPI_DOUBLE, MPI_COMM_WORLD);
 
 	for (int r = 0; r < parameters.steps_myid; r++) {
-		int y = r + parameters.start.at(parameters.myid); 
-		impurity_self_energy_real_myid.at(r) = kramer_kronig_relation(parameters, impurity_self_energy_imag, y);
-		aim_up.self_energy_mb_retarded.at(r) = impurity_self_energy_real_myid.at(r) + parameters.j1 * impurity_self_energy_imag_myid.at(r);
+		int y = r + parameters.start[parameters.myid]; 
+		impurity_self_energy_real_myid[r] = kramer_kronig_relation(parameters, impurity_self_energy_imag, y);
+		aim_up.self_energy_mb_retarded[r] = impurity_self_energy_real_myid[r] + parameters.j1 * impurity_self_energy_imag_myid[r];
 	}
 }
 
@@ -245,12 +245,12 @@ void get_difference_self_energy(const Parameters &parameters, std::vector<dcomp>
 	double difference_proc = - std::numeric_limits<double>::infinity();
 	double real_difference = 0, imag_difference = 0;
 	for (int r = 0; r < parameters.steps_myid; r++) {
-		real_difference = absolute_value(self_energy_mb_up.at(r).real() - old_self_energy_mb_up.at(r).real());
-		imag_difference = absolute_value(self_energy_mb_up.at(r).imag() - old_self_energy_mb_up.at(r).imag());
-		//std::cout << gf_local_up.at(r)(i, j).real() << " " << old_green_function.at(r)(i, j).real() << std::endl;
+		real_difference = absolute_value(self_energy_mb_up[r].real() - old_self_energy_mb_up[r].real());
+		imag_difference = absolute_value(self_energy_mb_up[r].imag() - old_self_energy_mb_up[r].imag());
+		//std::cout << gf_local_up[r](i, j).real() << " " << old_green_function[r](i, j).real() << std::endl;
 		//std::cout << real_difference << "  " << imag_difference << "  "  << difference << "\n";
 		difference_proc = std::max(difference_proc, std::max(real_difference, imag_difference));
-		old_self_energy_mb_up.at(r) = self_energy_mb_up.at(r);
+		old_self_energy_mb_up[r] = self_energy_mb_up[r];
 	}
 	//std::cout << "I am rank " << parameters.myid << ". The difference for me is " << difference_proc << std::endl;
 	//MPI_Allreduce would do the same thing.
