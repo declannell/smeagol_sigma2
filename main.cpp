@@ -96,18 +96,18 @@ int main(int argc, char **argv)
 
 	for (int i = 0; i < parameters.num_orb_total; i++) {
 		for (int j = 0; j < parameters.num_orb_total; j++) {
-			//print_to_file(parameters, "gamma_left_up", gamma_left_up, i, j , 1);
-			//print_to_file(parameters, "gamma_right_up", gamma_right_up, i, j , 1);
-			//print_to_file(parameters, "gamma_left_down", gamma_left_down, i, j , 1);
-			//print_to_file(parameters, "gamma_right_down", gamma_right_down, i, j , 1);
+			print_to_file(parameters, "gamma_left_up", gamma_left_up, i, j , 1);
+			print_to_file(parameters, "gamma_right_up", gamma_right_up, i, j , 1);
+			print_to_file(parameters, "gamma_left_down", gamma_left_down, i, j , 1);
+			print_to_file(parameters, "gamma_right_down", gamma_right_down, i, j , 1);
 			if (parameters.read_gf != 1) {
-				//print_to_file(parameters, "se_left_retarded_up", se_left_retarded_up, i, j , 1);
-				//print_to_file(parameters, "se_left_retarded_down", se_left_retarded_down, i, j , 1);
-				//print_to_file(parameters, "se_right_retarded_up", se_right_retarded_up, i, j , 1);
-				//print_to_file(parameters, "se_right_retarded_down", se_right_retarded_down, i, j , 1);
+				print_to_file(parameters, "se_left_retarded_up", se_left_retarded_up, i, j , 1);
+				print_to_file(parameters, "se_left_retarded_down", se_left_retarded_down, i, j , 1);
+				print_to_file(parameters, "se_right_retarded_up", se_right_retarded_up, i, j , 1);
+				print_to_file(parameters, "se_right_retarded_down", se_right_retarded_down, i, j , 1);
 			}
-			//print_to_file(parameters, "gf_non_r_up", gf_int_r_up, i, j , 1);
-			//print_to_file(parameters, "gf_non_r_down", gf_int_r_down, i, j , 1);
+			print_to_file(parameters, "gf_non_r_up", gf_int_r_up, i, j , 1);
+			print_to_file(parameters, "gf_non_r_down", gf_int_r_down, i, j , 1);
 		}
 	}
 
@@ -142,15 +142,15 @@ int main(int argc, char **argv)
 	get_lesser_gf(parameters, gf_int_r_down, se_left_lesser_down, se_right_lesser_down, sigma_mb_l_down, gf_int_l_down);
 
 	for (int i = 0; i < parameters.num_orb_total; i++) {
-		//print_to_file(parameters, "se_retarded_up", sigma_mb_r_up, i, i , 1);
-		//print_to_file(parameters, "se_lesser_up", sigma_mb_l_up, i, i , 1);
-		//print_to_file(parameters, "se_retarded_down", sigma_mb_r_down, i, i , 1);
-		//print_to_file(parameters, "se_lesser_down", sigma_mb_l_down, i, i , 1);
+		print_to_file(parameters, "se_retarded_up", sigma_mb_r_up, i, i , 1);
+		print_to_file(parameters, "se_lesser_up", sigma_mb_l_up, i, i , 1);
+		print_to_file(parameters, "se_retarded_down", sigma_mb_r_down, i, i , 1);
+		print_to_file(parameters, "se_lesser_down", sigma_mb_l_down, i, i , 1);
 		for (int j = 0; j < parameters.num_orb_total; j++) {
-			//print_to_file(parameters, "gf_retarded_up", gf_int_r_up, i, j , 1);
-			//print_to_file(parameters, "gf_lesser_up", gf_int_l_up, i, j , 1);
-			//print_to_file(parameters, "gf_retarded_down", gf_int_r_down, i, j , 1);
-			//print_to_file(parameters, "gf_lesser_down", gf_int_l_down, i, j , 1);
+			print_to_file(parameters, "gf_retarded_up", gf_int_r_up, i, j , 1);
+			print_to_file(parameters, "gf_lesser_up", gf_int_l_up, i, j , 1);
+			print_to_file(parameters, "gf_retarded_down", gf_int_r_down, i, j , 1);
+			print_to_file(parameters, "gf_lesser_down", gf_int_l_down, i, j , 1);
 		}
 	}
 
