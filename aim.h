@@ -22,7 +22,7 @@ public:
     
     std::vector<double> fermi_function_eff;
 
-    AIM(const Parameters &parameters, const MatrixVectorType &local_gf_retarded, const MatrixVectorType &local_gf_lesser, int i); 
+    AIM(const Parameters &parameters, const MatrixVectorType &local_gf_retarded, const MatrixVectorType &local_gf_lesser, int i, int spin); 
 
     void get_dynamical_fields(const Parameters &parameters, const MatrixVectorType &local_gf_retarded,
          const MatrixVectorType &local_gf_lesser, int i);
@@ -34,4 +34,5 @@ public:
     void get_lesser_hybridisation(const Parameters &parameters);
 
     void get_impurity_gf_mb_lesser(const Parameters &parameters);
+    void read_self_energy(const Parameters &parameters, int spin);
 };

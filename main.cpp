@@ -115,8 +115,8 @@ int main(int argc, char **argv)
 	get_lesser_gf(parameters, gf_int_r_down, se_left_lesser_down, se_right_lesser_down, sigma_mb_l_down, gf_int_l_down);
 
 	for (int i = 0; i < parameters.num_atoms; i++) {
-		AIM aim_up(parameters, gf_int_r_up, gf_int_l_up, i);
-		AIM aim_down(parameters, gf_int_r_down, gf_int_l_down, i);
+		AIM aim_up(parameters, gf_int_r_up, gf_int_l_up, i, 1);
+		AIM aim_down(parameters, gf_int_r_down, gf_int_l_down, i, 2);
 
 		if (parameters.hubbard_interaction != 0) {
 			impurity_solver_sigma_2(parameters, aim_up, aim_down);

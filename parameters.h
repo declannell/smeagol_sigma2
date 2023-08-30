@@ -44,6 +44,7 @@ struct Parameters
     int num_atoms; //total number of atoms in the scattering region. 
     int num_orb_total; //total number of orbtial in the scattering region
     double se_mixing;// this is a number between 1 and zero which determines the mixing of the self energy between each iteration
+    int read_se; /// 1 means we read a self energy from file. 
 };
 
 

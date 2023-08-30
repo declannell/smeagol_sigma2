@@ -41,6 +41,7 @@ Parameters Parameters::from_file()
 
 	parameters.se_mixing = 0.5;
 	parameters.num_atoms = 1;
+	parameters.read_se = 0;
 
 	while (getline(input_file, line)) {
 			//std::cout << line << '\n';
@@ -80,7 +81,10 @@ Parameters Parameters::from_file()
 			parameters.num_atoms = std::stoi(value);
 		} else if (variable == "se_mixing") {
 			parameters.se_mixing = std::stod(value);
-		}//else if (variable == "random_err") {
+		} else if (variable == "read_se") {
+			parameters.read_se = std::stoi(value);
+		}	
+		//else if (variable == "random_err") {
 			//parameters.random_err = std::stod(value);
 		//}
 	}
@@ -100,8 +104,12 @@ Parameters Parameters::from_file()
 	//}
 
 	if (parameters.num_atoms != 1) parameters.read_gf = 1, parameters.model_calc = 1; //if there is more than 1 atom in the scattering region we must read the gf from file. 
+	if (parameters.num_atoms != 1) parameters.read_se = 0; //if there is more than 1 atom in the scattering region we can't yet read the self energy. 
+	
 
 	if (parameters.read_gf == 1) parameters.model_calc = 1; //if we are reading the gf from file, then we can't do a model calc. 
+	if (parameters.read_se == 1) parameters.impurity_solver = 1; //can't do kramer-kronig if we already have a self energy.
+
 
 	parameters.voltage = 0.5 * parameters.voltage;
     MPI_Comm_size(MPI_COMM_WORLD, &parameters.size);
@@ -168,4 +176,6 @@ void print_parameters(Parameters& parameters)
 	std::cout << "num atoms = " << parameters.num_atoms << std::endl;
 	std::cout << "num orb totals = " << parameters.num_orb_total << std::endl;
 	std::cout << "se_mixing= " << parameters.se_mixing << std::endl;
+	std::cout << "read_se= " << parameters.read_se << std::endl;
+
 }
